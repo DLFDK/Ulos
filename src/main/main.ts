@@ -2,7 +2,6 @@ import { fromNodeProviderChain } from "@aws-sdk/credential-providers";
 import type { AwsCredentialIdentity } from "@aws-sdk/types";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
-import { CloudWatchLogsClient, GetLogEventsCommand } from "@aws-sdk/client-cloudwatch-logs";
 import chalk from "chalk";
 import ora from "ora";
 
@@ -46,23 +45,6 @@ export function isString(value: unknown): value is string {
 
 export function isUndefined(input: unknown): input is undefined {
     return typeof input === "undefined";
-}
-
-export class LogFetcher {
-    client: CloudWatchLogsClient;
-    constructor(credentials: AwsCredentialIdentity) {
-        this.client = new CloudWatchLogsClient({ credentials, region: "eu-west-1" });
-    }
-
-    async getLogEvents(logGroupName: string, logStreamName: string) {
-        const command = new GetLogEventsCommand({
-            logGroupName: "/aws/lambda/ulos-test",
-            logStreamName: "2023/05/28/[$LATEST]33572fef6385409ea252aaf495e09cea",
-        });
-
-        const response = await this.client.send(command);
-        console.log(response);
-    }
 }
 
 export class Painter {
