@@ -1,7 +1,7 @@
 {
   "name": "ulos",
   "version": "1.0.0",
-  "description": "Upload your lambda functions on save",
+  "description": "Upload your Lambda functions on save",
   "main": "dist/main/index.js",
   "module": "dist/main/index.js",
   "type": "module",
