@@ -2,8 +2,7 @@
   "name": "ulos",
   "version": "1.0.0",
   "description": "Upload your Lambda functions on save",
-  "main": "dist/main/index.js",
-  "module": "dist/main/index.js",
+  "exports": "./dist/main/index.js",
   "type": "module",
   "files": [
     "dist/"
@@ -15,15 +14,15 @@
   "bin": "./dist/main/index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DLFDK/ulos.git"
+    "url": "git+https://github.com/DLFDK/Ulos.git"
   },
-  "keywords": [],
+  "keywords": ["aws", "lambda", "upload", "deploy", "serverless"],
   "author": "Dennis Frederiksen",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/DLFDK/ulos/issues"
+    "url": "https://github.com/DLFDK/Ulos/issues"
   },
-  "homepage": "https://github.com/DLFDK/ulos#readme",
+  "homepage": "https://github.com/DLFDK/Ulos#readme",
   "dependencies": {
     "@aws-sdk/client-lambda": "^3.335.0",
     "@aws-sdk/credential-providers": "^3.335.0",
