@@ -1,6 +1,6 @@
 {
   "name": "ulos",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Upload your Lambda functions on save",
   "exports": "./dist/main/index.js",
   "type": "module",
@@ -16,7 +16,13 @@
     "type": "git",
     "url": "git+https://github.com/DLFDK/Ulos.git"
   },
-  "keywords": ["aws", "lambda", "upload", "deploy", "serverless"],
+  "keywords": [
+    "aws",
+    "lambda",
+    "upload",
+    "deploy",
+    "serverless"
+  ],
   "author": "Dennis Frederiksen",
   "license": "MIT",
   "bugs": {
