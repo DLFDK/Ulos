@@ -1,0 +1,42 @@
+{
+  "name": "ulos",
+  "version": "1.0.0",
+  "description": "Upload your lambda functions on save",
+  "main": "dist/main/index.js",
+  "module": "dist/main/index.js",
+  "type": "module",
+  "files": [
+    "dist/"
+  ],
+  "scripts": {
+    "start": "node dist/main/index.js",
+    "build": "npx tsc"
+  },
+  "bin": "./dist/main/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DLFDK/ulos.git"
+  },
+  "keywords": [],
+  "author": "Dennis Frederiksen",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/DLFDK/ulos/issues"
+  },
+  "homepage": "https://github.com/DLFDK/ulos#readme",
+  "dependencies": {
+    "@aws-sdk/client-lambda": "^3.335.0",
+    "@aws-sdk/credential-providers": "^3.335.0",
+    "adm-zip": "^0.5.10",
+    "chalk": "^5.2.0",
+    "chokidar": "^3.5.3",
+    "ora": "^6.3.1",
+    "yargs": "^17.7.2"
+  },
+  "devDependencies": {
+    "@types/yargs": "^17.0.24",
+    "@types/adm-zip": "^0.5.0",
+    "@types/node": "^20.2.1",
+    "typescript": "^5.0.4"
+  }
+}
