@@ -1,7 +1,7 @@
 # Ulos
 **U**pload **L**ambda **O**n **S**ave - it's that simple, really.
 
-Ulos is a minimal Nodejs library that watches a file (or folder of files and subfolders) for changes and uploads a new deployment package to AWS Lambda when a change is registered. Files and folders are watched using [Chokidar](https://github.com/paulmillr/chokidar)
+Ulos is a minimal Nodejs library that watches a file (or folder of files and subfolders) for changes and uploads a new deployment package to AWS Lambda when a change is registered. Files and folders are watched using [Chokidar](https://github.com/paulmillr/chokidar). 
 
 ## Getting started
 
@@ -26,3 +26,5 @@ Required. The region in which the Lambda function resides.
 **`--profile`**
 
 Optional. Ulos will attempt to fetch default credentials from the system using the AWS SDK V3 [@aws-sdk/credential-providers](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/modules/_aws_sdk_credential_providers.html). If you would like to provide a different profile or you have no default profile set, you can provide an explicit profile here.
+
+Note that as of version 1.0, the content of the deployment package is not compressed.
