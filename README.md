@@ -26,5 +26,3 @@ Required. The region in which the Lambda function resides.
 **`--profile`**
 
 Optional. Ulos will attempt to fetch default credentials from the system using the AWS SDK V3 [@aws-sdk/credential-providers](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/modules/_aws_sdk_credential_providers.html). If you would like to provide a different profile or you have no default profile set, you can provide an explicit profile here.
-
-Note that as of version 1.0, the content of the deployment package is not compressed.
