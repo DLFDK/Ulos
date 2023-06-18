@@ -4,6 +4,8 @@ import type { MessageFromWorker, MessageToWorker, WorkerData } from "../shared.t
 
 if (!parentPort) throw new Error("No parent port");
 
+const postMessage = (message: MessageFromWorker) => parentPort!.postMessage(message);
+
 const { lambda, target, region, credentials } = workerData as WorkerData;
 
 const { targetFolder, targetFile } = await getTargets(target);
@@ -34,16 +36,15 @@ async function processQueue() {
         return;
     }
 
-    parentPort!.postMessage("uploading");
+    parentPort!.postMessage({status: "uploading"});
 
     const result = await uploader.upload(buffer);
 
-    if(result === "uploaded") parentPort!.postMessage("uploaded");
-
-    if (result === "busy" || fileQueue.size) {
+    if (!result || fileQueue.size) {
         await new Promise((resolve) => setTimeout(resolve, 2000));
         processQueue();
+    } else {
+        postMessage({status: "success", codeSize: result})
+        isProcessing = false;
     }
-
-    isProcessing = false;
 }

@@ -47,11 +47,19 @@ export function isUndefined(input: unknown): input is undefined {
     return typeof input === "undefined";
 }
 
+export function formatCodeSize(codeSize: number): string {
+    if (codeSize < 1024) return `${codeSize} B`;
+    const kilobytes = codeSize / 1024;
+    if (kilobytes < 1024) return `${kilobytes.toFixed(0)} KB`;
+    const megabytes = kilobytes / 1024;
+    return `${megabytes.toFixed(1)} MB`;
+}
+
 export class Painter {
     #prevState = "";
     #spinner = ora();
 
-    paint(state: string, message?: string) {
+    paint(state: "start" | "initial" | "uploading" | "watching" | "error", message?: string) {
         switch (state) {
             case "start":
                 this.#clearScreen();
@@ -65,17 +73,18 @@ export class Painter {
             case "uploading":
                 if (this.#prevState === "initial") {
                     this.#spinner.text = "Uploading deployment package";
-                } else if (this.#prevState === "ready") {
+                    break;
+                } else {
                     this.#spinner.stop();
                     this.#clearScreen();
                     this.#paintTitle();
                     this.#spinner = ora().start("Uploading deployment package");
+                    break;
                 }
-                break;
-            case "ready":
+            case "watching":
                 const date = new Date();
                 const time = `${date.getHours() < 10 ? "0" : ""}${date.getHours()}:${date.getMinutes() < 10 ? "0" : ""}${date.getMinutes()}:${date.getSeconds() < 10 ? "0" : ""}${date.getSeconds()}`;
-                this.#spinner.text = `Deployment package uploaded [${time}]`;
+                this.#spinner.text = `Deployment package uploaded (${message}) [${time}]`;
                 this.#spinner.succeed();
                 this.#spinner.stop();
                 this.#spinner = ora({ interval: 400 }).start("Watching for files changes");

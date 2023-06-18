@@ -61,8 +61,8 @@ export class Archiver {
                     let buffer = Buffer.alloc(0);
                     let attempts = 0;
 
-                    while(!buffer.byteLength) {
-                        if(attempts > 3) throw new Error(`${filename} could not be read`);
+                    while (!buffer.byteLength) {
+                        if (attempts > 3) throw new Error(`${filename} could not be read`);
                         buffer = await readFile(path.format({ dir: targetFolder, base: filename }));
                         attempts++;
                     }
@@ -104,13 +104,13 @@ export class Uploader {
         this.#lambda = lambda;
     }
 
-    async upload(buffer: Buffer): Promise<"uploaded" | "busy"> {
+    async upload(buffer: Buffer): Promise<number | undefined> {
         try {
-            const { CodeSha256 } = await this.#client.send(new UpdateFunctionCodeCommand({ FunctionName: this.#lambda, ZipFile: buffer }));
+            const { CodeSha256, CodeSize } = await this.#client.send(new UpdateFunctionCodeCommand({ FunctionName: this.#lambda, ZipFile: buffer }));
             this.#hashOfUploaded = CodeSha256 ?? "";
-            return "uploaded";
+            return CodeSize;
         } catch (error) {
-            if (error instanceof ResourceConflictException && error.$metadata.httpStatusCode === 409) return "busy";
+            if (error instanceof ResourceConflictException && error.$metadata.httpStatusCode === 409) return;
             throw error;
         }
     }

@@ -5,7 +5,10 @@ export interface MessageToWorker {
     eventPath: string;
 }
 
-export type MessageFromWorker = "uploaded" | "busy" | "nochange" | "ready" | "uploading";
+export interface MessageFromWorker {
+    status: "uploading" | "success",
+    codeSize?: number;
+}
 
 export interface WorkerData {
     lambda: string;

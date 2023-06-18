@@ -3,7 +3,7 @@ import { Worker } from "node:worker_threads";
 import { fileURLToPath } from "url";
 import path from "path";
 import chokidar from "chokidar";
-import { getArguments, getCredentials, Painter } from "./main.js";
+import { getArguments, getCredentials, Painter, formatCodeSize } from "./main.js";
 import type { MessageFromWorker, MessageToWorker, WorkerData } from "../shared.types.d.ts";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -31,18 +31,20 @@ const workerData: WorkerData = { lambda, target, region, credentials };
 
 const worker = new Worker(__dirname + "/../worker/index.js", { workerData: workerData });
 
+const postMessage = (message: MessageToWorker) => worker.postMessage(message);
+
 chokidar.watch(target, { ignoreInitial: true }).on("all", (event, eventPath) => {
     const message: MessageToWorker = { event, eventPath };
-    if (event === "add" || event === "change" || event === "unlink") worker.postMessage(message);
+    if (event === "add" || event === "change" || event === "unlink") postMessage(message);
 });
 
 worker.on("message", (message: MessageFromWorker) => {
-    switch (message) {
+    switch (message.status) {
         case "uploading":
             painter.paint("uploading");
             break;
-        case "uploaded":
-            painter.paint("ready");
+        case "success":
+            painter.paint("watching", formatCodeSize(message.codeSize ?? 0));
             break;
     }
 });
