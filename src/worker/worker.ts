@@ -61,8 +61,9 @@ export class Archiver {
                     let buffer = Buffer.alloc(0);
                     let attempts = 0;
 
+                    // An empty buffer can be the result of a file being written to. After three attempts, we assume the file is actually empty.
                     while (!buffer.byteLength) {
-                        if (attempts > 3) throw new Error(`${filename} could not be read`);
+                        if (attempts > 3) break;
                         buffer = await readFile(path.format({ dir: targetFolder, base: filename }));
                         attempts++;
                     }
