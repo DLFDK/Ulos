@@ -5,7 +5,7 @@ Ulos is a minimal Nodejs library that watches a file (or folder of files and sub
 
 ## Getting started
 
-Ulos is invoked using `npx` and a series of flags.
+Ulos is invoked using `npx` and a series of arguments.
 
 ```
 npx ulos --target "path/to/file/or/folder" --lambda "myfunction" --region "myregion" --profile "myprofile" 
