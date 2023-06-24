@@ -1,8 +1,8 @@
 import type { AwsCredentialIdentity } from "@aws-sdk/types";
 
 export interface MessageToWorker {
-    event: string;
-    eventPath: string;
+    filePath: string;
+    fileEvent: "change" | "add" | "unlink";
 }
 
 export interface MessageFromWorker {
@@ -12,7 +12,7 @@ export interface MessageFromWorker {
 
 export interface WorkerData {
     lambda: string;
-    target: string;
+    targetFolder: string;
     region: string;
     credentials: AwsCredentialIdentity;
 }

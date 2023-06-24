@@ -1,50 +1,25 @@
 import { parentPort, workerData } from "worker_threads";
-import { getTargets, primeQueue, Archiver, Uploader, getRelativePosixPath } from "./worker.js";
+import { Archiver, Uploader, QueueManager } from "./worker.js";
 import type { MessageFromWorker, MessageToWorker, WorkerData } from "../shared.types.d.ts";
 
 if (!parentPort) throw new Error("No parent port");
 
+const delayConfig = {
+    add: 1000,
+    change: 0,
+    unlink: 1000,
+}
+
 const postMessage = (message: MessageFromWorker) => parentPort!.postMessage(message);
 
-const { lambda, target, region, credentials } = workerData as WorkerData;
+const { lambda, targetFolder, region, credentials } = workerData as WorkerData;
 
-const { targetFolder, targetFile } = await getTargets(target);
+const archiver = new Archiver(targetFolder);
 
-const archiver = new Archiver();
 const uploader = new Uploader(lambda, region, credentials);
 
-const fileQueue = await primeQueue(targetFolder, targetFile);
-
-let isProcessing: boolean;
-
-await processQueue();
+const queueManager = new QueueManager(archiver, uploader, postMessage, delayConfig);
 
 parentPort.on("message", (message: MessageToWorker) => {
-    fileQueue.set(getRelativePosixPath(targetFolder, message.eventPath), message.event);
-    
-    if (!isProcessing) {
-        isProcessing = true;
-        processQueue();
-    }
+    queueManager.add(message.filePath, message.fileEvent);
 });
-
-async function processQueue() {
-    const buffer = await archiver.archive(fileQueue, targetFolder);
-
-    if(!uploader.hasChanged(buffer)) {
-        isProcessing = false;
-        return;
-    }
-
-    parentPort!.postMessage({status: "uploading"});
-
-    const result = await uploader.upload(buffer);
-
-    if (!result || fileQueue.size) {
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-        processQueue();
-    } else {
-        postMessage({status: "success", codeSize: result})
-        isProcessing = false;
-    }
-}
